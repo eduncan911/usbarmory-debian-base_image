@@ -10,7 +10,9 @@ jobs:
         device: [mark-one]
         boot: [uSD]
     steps:
-    - name: Building ${{ matrix.device }} ${{ matrix.boot }}
-      uses: ./.github/actions/docker/
+    
+    - uses: actions/checkout@v1
+
+    - uses: ./.github/actions/docker
       with:
         entrypoint: 'make all V=mark-one IMX=imx53'
