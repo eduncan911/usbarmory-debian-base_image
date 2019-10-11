@@ -15,4 +15,4 @@ jobs:
     - name: Building ${{ matrix.device }} ${{ matrix.boot }}
       uses: ./.github/actions/docker/
       with:
-        entrypoint: [ "make", "all", "V=mark-one", "IMX=imx53" ]
+        entrypoint: 'make all V=mark-one IMX=imx53'
