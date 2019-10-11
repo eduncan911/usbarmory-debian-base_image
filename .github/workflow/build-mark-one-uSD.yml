@@ -1,0 +1,17 @@
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build All
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        device: [mark-one]
+        boot: [uSD]
+
+    steps:
+    
+    - name: Building ${{ matrix.device }} ${{ matrix.boot }}
+      uses: ./.github/actions/docker/
+      entrypoint: [ "make", "all", "V=mark-one", "IMX=imx53" ]
