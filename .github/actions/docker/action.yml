@@ -1,5 +1,11 @@
 name: 'USBArmory Docker Builder'
 description: 'Creates a build environment within Docker to reuse during CI'
+inputs:
+  entrypoint:  # id of input
+    description: 'Command to Run'
+    required: true
+    default: 'echo "Nothing to do!"'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  entrypoint: ${{ inputs.entrypoint }}
