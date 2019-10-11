@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -9,9 +9,7 @@ jobs:
       matrix:
         device: [mark-one]
         boot: [uSD]
-
     steps:
-    
     - name: Building ${{ matrix.device }} ${{ matrix.boot }}
       uses: ./.github/actions/docker/
       with:
