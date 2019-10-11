@@ -2,4 +2,4 @@ name: 'USBArmory Docker Builder'
 description: 'Creates a build environment within Docker to reuse during CI'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: '../../../Dockerfile'
