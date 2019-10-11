@@ -10,9 +10,9 @@ jobs:
         device: [mark-one]
         boot: [uSD]
     steps:
-    
+
     - uses: actions/checkout@v1
 
     - uses: ./.github/actions/docker
       with:
-        entrypoint: 'make all V=mark-one IMX=imx53'
+        entrypoint: 'cd /github/workspace && make all V=mark-one IMX=imx53'
