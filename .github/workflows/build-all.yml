@@ -18,7 +18,9 @@ jobs:
 
     - name: Import Signing Keys
       run: |
-        gpg --keyserver hkp://pgp.mit.edu --recv-keys 38DBBDC86092693E 87F9F635D31D7652
+        mkdir ~/.gnupg && chmod 700 ~/.gnupg
+        echo "keyserver hkp://keys.gnupg.net" > ~/.gnupg/dirmngr.conf
+        gpg --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} linux-deb
@@ -43,7 +45,9 @@ jobs:
 
     - name: Import Signing Keys
       run: |
-        gpg --keyserver hkp://pgp.mit.edu --recv-keys 38DBBDC86092693E 87F9F635D31D7652
+        mkdir ~/.gnupg && chmod 700 ~/.gnupg
+        echo "keyserver hkp://keys.gnupg.net" > ~/.gnupg/dirmngr.conf
+        gpg --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
