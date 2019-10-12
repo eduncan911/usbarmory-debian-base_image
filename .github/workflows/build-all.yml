@@ -21,6 +21,8 @@ jobs:
 
     - name: Prerequisites
       run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y 
         sudo apt-get install -y \
           bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
           gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
@@ -54,6 +56,8 @@ jobs:
 
     - name: Prerequisites
       run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y 
         sudo apt-get install -y \
           bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
           gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
