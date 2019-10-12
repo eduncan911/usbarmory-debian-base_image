@@ -3,7 +3,7 @@ on: [push]
 jobs:
   mark-one:
     name: Mark I
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-16.04
     strategy:
       fail-fast: true
       matrix:
@@ -29,7 +29,7 @@ jobs:
 
   mark-two:
     name: Mark II
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-16.04
     strategy:
       fail-fast: true
       matrix:
