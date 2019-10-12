@@ -43,9 +43,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        device: [mark-one]
         arch: [imx53]
         boot: [uSD]
+        device: [mark-one]
     steps:
     - uses: actions/checkout@v1
 
@@ -76,9 +76,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        device: [mark-two]
         arch: [imx6ul, imx6ull]
         boot: [uSD, eMMC]
+        device: [mark-two]
     steps:
     - uses: actions/checkout@v1
 
