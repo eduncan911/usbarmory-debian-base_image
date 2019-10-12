@@ -5,7 +5,7 @@ jobs:
     name: Mark I
     runs-on: ubuntu-16.04
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         device: [mark-one]
         arch: [imx53]
@@ -18,8 +18,7 @@ jobs:
 
     - name: Import Signing Keys
       run: |
-        gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E
-        gpg --keyserver hkp://keys.gnupg.net --recv-keys 87F9F635D31D7652
+        gpg --keyserver hkp://pgp.mit.edu --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} linux-deb
@@ -31,7 +30,7 @@ jobs:
     name: Mark II
     runs-on: ubuntu-16.04
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         device: [mark-two]
         arch: [imx6ul, imx6ull]
@@ -44,8 +43,7 @@ jobs:
 
     - name: Import Signing Keys
       run: |
-        gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E
-        gpg --keyserver hkp://keys.gnupg.net --recv-keys 87F9F635D31D7652
+        gpg --keyserver hkp://pgp.mit.edu --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
