@@ -31,27 +31,54 @@ on: [push]
 # | mark-two | imx6ull | eMMC | PASS |
 # +----------+---------+------+------+
 #
-# Therefore, there are really only 5 successful builds, and 7 expected failed
+# Therefore, there are only 5 successful builds, and 7 expected failed
 # builds per the above matrix.  However, Github Actions doesn't have a clean
 # way of testing for failed builds with specific matrix params.  Therefore,
 # we need two "jobs" below.  One for mark one, and one for mark two.
 #
 
 jobs:
-  build:
+  mark-one:
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
-        device: [mark-one, mark-two]
-        arch: [imx53, imx6ul, imx6ull]
+        device: [mark-one]
+        arch: [imx53]
+        boot: [uSD]
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Prerequisites
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
+          gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
+          sudo dirmngr bison flex libssl-dev kmod
+
+    - name: Import Signing Keys
+      run: |  # public key servers keep timing out w/parallel calls
+        retry=0; until [ $retry -ge 5 ]; do
+          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && break
+          n=$[$n+1]
+          sleep $((1 + RANDOM % 30))
+        done
+    
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} debian 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} u-boot 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} finalize
+
+  mark-two:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        device: [mark-two]
+        arch: [imx6ul, imx6ull]
         boot: [uSD, eMMC]
-    if: |
-      (device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'uSD') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'uSD') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'uSD') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC')
     steps:
     - uses: actions/checkout@v1
 
