@@ -66,56 +66,56 @@ jobs:
         done
     
     - run: make V=mark-one IMX=imx53 BOOT=eSD check_version
-      if: matrix.device == 'mark-one' && matrix.arch = 'imx53' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'eSD'
     - run: make V=mark-one IMX=imx53 BOOT=eSD linux-deb
-      if: matrix.device == 'mark-one' && matrix.arch = 'imx53' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'eSD'
     - run: make V=mark-one IMX=imx53 BOOT=eSD debian 
-      if: matrix.device == 'mark-one' && matrix.arch = 'imx53' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'eSD'
     - run: make V=mark-one IMX=imx53 BOOT=eSD u-boot 
-      if: matrix.device == 'mark-one' && matrix.arch = 'imx53' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'eSD'
     - run: make V=mark-one IMX=imx53 BOOT=eSD finalize
-      if: matrix.device == 'mark-one' && matrix.arch = 'imx53' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-one' && matrix.arch == 'imx53' && matrix.boot == 'eSD'
 
     - run: make V=mark-two IMX=imx6ul BOOT=eSD check_version
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ul BOOT=eSD linux-deb
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ul BOOT=eSD debian 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ul BOOT=eSD u-boot 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ul BOOT=eSD finalize
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eSD'
 
     - run: make V=mark-two IMX=imx6ul BOOT=eMMC check_version
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ul BOOT=eMMC linux-deb
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ul BOOT=eMMC debian 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ul BOOT=eMMC u-boot 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ul BOOT=eMMC finalize
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ul' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC'
     
     - run: make V=mark-two IMX=imx6ull BOOT=eSD check_version
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ull BOOT=eSD linux-deb
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ull BOOT=eSD debian 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ull BOOT=eSD u-boot 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eSD'
     - run: make V=mark-two IMX=imx6ull BOOT=eSD finalize
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eSD'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eSD'
 
     - run: make V=mark-two IMX=imx6ull BOOT=eMMC check_version
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ull BOOT=eMMC linux-deb
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ull BOOT=eMMC debian 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ull BOOT=eMMC u-boot 
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC'
     - run: make V=mark-two IMX=imx6ull BOOT=eMMC finalize
-      if: matrix.device == 'mark-two' && matrix.arch = 'imx6ull' && matrix.boot == 'eMMC'
+      if: matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC'
