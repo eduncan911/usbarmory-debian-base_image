@@ -1,0 +1,54 @@
+on: [push]
+
+jobs:
+  mark-one:
+    name: Mark I
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: true
+      matrix:
+        device: [mark-one]
+        arch: [imx53]
+        boot: [uSD]
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Prerequisites
+      run: apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
+
+    - name: Import Signing Keys
+      run: |
+        gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E
+        gpg --keyserver hkp://keys.gnupg.net --recv-keys 87F9F635D31D7652
+    
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} check_version
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} linux-deb
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} debian 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} u-boot 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} finalize
+
+  mark-two:
+    name: Mark II
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: true
+      matrix:
+        device: [mark-two]
+        arch: [imx6ul, imx6ull]
+        boot: [uSD, eMMC]
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Prerequisites
+      run: apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
+
+    - name: Import Signing Keys
+      run: |
+        gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E
+        gpg --keyserver hkp://keys.gnupg.net --recv-keys 87F9F635D31D7652
+    
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} debian 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} u-boot 
+    - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} finalize
