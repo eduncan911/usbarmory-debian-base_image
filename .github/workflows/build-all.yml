@@ -1,5 +1,11 @@
 on: [push]
 
+# TODO:
+# - Verify output binary
+# - Create releases if pushed to Master (w/binary attachment and sig)
+#   This would require a private key in repo.  Maybe a short-expiring sub-key?
+#
+
 jobs:
   mark-one:
     name: Mark I
@@ -14,10 +20,21 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Prerequisites
-      run: sudo apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
+      run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y 
+        sudo apt-get install -y \
+          bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
+          gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
+          sudo dirmngr bison flex libssl-dev kmod
 
     - name: Import Signing Keys
-      run: gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652
+      run: | # public key servers keep timing out w/parallel calls
+        retry=0; until [ $retry -ge 5 ]; do
+          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && break
+          n=$[$n+1]
+          sleep $((1 + RANDOM % 30))
+        done
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} linux-deb
@@ -32,17 +49,28 @@ jobs:
       fail-fast: false
       matrix:
         device: [mark-two]
-        arch: [imx6ul, imx6ull]
+        arch: [imx6ull]   # do we also want to build for imx6ul in parallel?
         boot: [uSD, eMMC]
     steps:
     - uses: actions/checkout@v1
 
     - name: Prerequisites
-      run: sudo apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
+      run: |
+        sudo apt-get update
+        sudo apt-get upgrade -y 
+        sudo apt-get install -y \
+          bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
+          gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
+          sudo dirmngr bison flex libssl-dev kmod
 
     - name: Import Signing Keys
-      run: gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652
-    
+      run: |  # public key servers keep timing out w/parallel calls
+        retry=0; until [ $retry -ge 5 ]; do
+          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && break
+          n=$[$n+1]
+          sleep $((1 + RANDOM % 30))
+        done
+
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} debian 
