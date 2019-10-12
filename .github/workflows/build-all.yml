@@ -17,10 +17,7 @@ jobs:
       run: sudo apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
 
     - name: Import Signing Keys
-      run: |
-        mkdir ~/.gnupg && chmod 700 ~/.gnupg
-        echo "keyserver hkp://keys.gnupg.net" > ~/.gnupg/dirmngr.conf
-        gpg --recv-keys 38DBBDC86092693E 87F9F635D31D7652
+      run: gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} linux-deb
@@ -44,10 +41,7 @@ jobs:
       run: sudo apt-get install -y bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git gnupg make parted qemu-user-static wget xz-utils zip debootstrap sudo dirmngr bison flex libssl-dev kmod
 
     - name: Import Signing Keys
-      run: |
-        mkdir ~/.gnupg && chmod 700 ~/.gnupg
-        echo "keyserver hkp://keys.gnupg.net" > ~/.gnupg/dirmngr.conf
-        gpg --recv-keys 38DBBDC86092693E 87F9F635D31D7652
+      run: gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652
     
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} check_version
     - run: make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} linux-deb
