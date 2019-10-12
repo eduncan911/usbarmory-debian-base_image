@@ -48,10 +48,10 @@ jobs:
         boot: [uSD, eMMC]
     if: |
       ((matrix.device == 'mark-one') && (matrix.arch == 'imx53)' && (matrix.boot == 'uSD')) \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'uSD') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ul' && matrix.boot == 'eMMC') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'uSD') \
-      || (matrix.device == 'mark-two' && matrix.arch == 'imx6ull' && matrix.boot == 'eMMC')
+      || ((matrix.device == 'mark-two') && (matrix.arch == 'imx6ul') && (matrix.boot == 'uSD')) \
+      || (matrix.device == 'mark-two') && (matrix.arch == 'imx6ul') && (matrix.boot == 'eMMC') \
+      || (matrix.device == 'mark-two') && (matrix.arch == 'imx6ull') && (matrix.boot == 'uSD') \
+      || (matrix.device == 'mark-two') && (matrix.arch == 'imx6ull') && (matrix.boot == 'eMMC')
     steps:
     - uses: actions/checkout@v1
 
