@@ -1,0 +1,108 @@
+# This workflow will build everything, package, compress, sign, hash,
+# and create a full GitHub release!
+#
+# It is triggered when you create a TAG only.
+# Optionally, we can change this to trigger on every Master push.
+#
+# REQUIREMENTS:
+# - create a GitHub Token
+# - use that token to create a GitHub Secret in your repo named: GITHUB_TOKEN_FOR_RELEASES
+# - ./.github/assets/release-template.json Template for Release Body
+#
+# TODO:
+# - Discuss PGP signing each file, which would require a sub-key in this repo
+#
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  release:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: true
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Prerequisites
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
+          gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
+          sudo dirmngr bison flex libssl-dev kmod
+
+    - name: Import Signing Keys
+      run: |  # public key servers keep timing out w/parallel calls
+        retry=0; until [ $retry -ge 5 ]; do
+          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && break
+          n=$[$n+1]
+          sleep $((1 + RANDOM % 30))
+        done
+
+    - run: mkdir -p release
+      
+    - name: mark-one imx53 uSD
+      run: |
+        make V=mark-one IMX=imx53 BOOT=uSD all release
+        mv usbarmory-* release/
+        make V=mark-one IMX=imx53 BOOT=uSD clean
+
+    - name: mark-two imx6ull uSD
+      run: |
+        make V=mark-one IMX=imx6ull BOOT=uSD all release
+        mv usbarmory-* release/
+        make V=mark-one IMX=imx6ull BOOT=uSD clean
+
+    - name: mark-two imx6ull eMMC
+      run: |
+        make V=mark-one IMX=imx6ull BOOT=eMMC all release
+        mv usbarmory-* release/
+        make V=mark-one IMX=imx6ull BOOT=eMMC clean
+
+    - name: Sign Files
+      run: echo "Need a key to sign!"
+
+    - name: Gather Release Data
+      id: release-data
+      run: |
+        assets=""
+        i=0; for f in release/*; do \
+          assets="$f ${assets}"
+        done
+        echo ::set-output name=assets::${assets}
+
+    # TODO: Create this action
+    - name: Create Template for Release
+      id: template-release
+      uses: ./.github/actions/template
+      with:
+        input_file: ./.github/assets/relesae-template.json
+        variables: |
+          RELEASE_DATE=20190506
+          RELEASE_NOTES= # TODO, github.ref == tag notes?
+    
+    # TODO: Modify for "body"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ${{ steps.template-release.outputs.text }}
+        draft: false
+        prerelease: false
+
+    # TODO: Modify for "assets" array
+    - name: Upload Assets to Release
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        assets: '${{ steps.release-data.outputs.assets }}'
