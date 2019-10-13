@@ -37,28 +37,29 @@ jobs:
     - name: Import Signing Keys
       run: |  # public key servers keep timing out w/parallel calls
         retry=0; until [ $retry -ge 5 ]; do
-          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && break
-          n=$[$n+1]
+          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && exit 0
+          retry=$[$retry+1]
           sleep $((1 + RANDOM % 30))
         done
+        exit 99
 
     - run: mkdir -p release
       
     - name: mark-one imx53 uSD
       run: |
-        make V=mark-one IMX=imx53 BOOT=uSD all release
+        make V=mark-one IMX=imx53 BOOT=uSD release
         mv usbarmory-* release/
         make V=mark-one IMX=imx53 BOOT=uSD clean
 
     - name: mark-two imx6ull uSD
       run: |
-        make V=mark-one IMX=imx6ull BOOT=uSD all release
+        make V=mark-one IMX=imx6ull BOOT=uSD release
         mv usbarmory-* release/
         make V=mark-one IMX=imx6ull BOOT=uSD clean
 
     - name: mark-two imx6ull eMMC
       run: |
-        make V=mark-one IMX=imx6ull BOOT=eMMC all release
+        make V=mark-one IMX=imx6ull BOOT=eMMC release
         mv usbarmory-* release/
         make V=mark-one IMX=imx6ull BOOT=eMMC clean
 
@@ -67,12 +68,7 @@ jobs:
 
     - name: Gather Release Data
       id: release-data
-      run: |
-        assets=""
-        i=0; for f in release/*; do \
-          assets="$f ${assets}"
-        done
-        echo ::set-output name=assets::${assets}
+      run: echo ::set-output name=assets::${ls -1 release/}
 
     # TODO: Create this action
     - name: Create Template for Release
