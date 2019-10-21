@@ -13,10 +13,10 @@
 # - Discuss PGP signing each file, which would require a sub-key in this repo
 #
 
+name: Release
 on:
   push:
     tags:
-    - '*'
 
 jobs:
   release:
@@ -35,13 +35,9 @@ jobs:
           sudo dirmngr bison flex libssl-dev kmod
 
     - name: Import Signing Keys
-      run: |  # public key servers keep timing out w/parallel calls
-        retry=0; until [ $retry -ge 5 ]; do
-          gpg --keyserver hkp://keys.gnupg.net --recv-keys 38DBBDC86092693E 87F9F635D31D7652 && exit 0
-          retry=$[$retry+1]
-          sleep $((1 + RANDOM % 30))
-        done
-        exit 99
+      run: |  # public key servers time out on at least one test, therefore we fetch cached keys
+        wget http://keys.inversepath.com/38DBBDC86092693E.asc && gpg --import 38DBBDC86092693E.asc
+        wget http://keys.inversepath.com/87F9F635D31D7652.asc && gpg --import 87F9F635D31D7652.asc
 
     - run: mkdir -p release
       
@@ -63,34 +59,32 @@ jobs:
         mv usbarmory-* release/
         make V=mark-one IMX=imx6ull BOOT=eMMC clean
 
-    - name: Sign Files
-      run: echo "Need a key to sign!"
-
     - name: Gather Release Data
       id: release-data
       run: echo ::set-output name=assets::${ls -1 release/}
 
     # TODO: Create this action
-    - name: Create Template for Release
-      id: template-release
-      uses: ./.github/actions/template
-      with:
-        input_file: ./.github/assets/relesae-template.json
-        variables: |
-          RELEASE_DATE=20190506
-          RELEASE_NOTES= # TODO, github.ref == tag notes?
+    # - name: Create Template for Release
+    #   id: template-release
+    #   uses: ./.github/actions/template
+    #   with:
+    #     input_file: ./.github/assets/release-template.json
+    #     variables: |
+    #       RELEASE_DATE=20190506
+    #       RELEASE_NOTES= # TODO, github.ref == tag notes?
     
     # TODO: Modify for "body"
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1.0.0
+      uses: .github/actions/create-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
-        body: ${{ steps.template-release.outputs.text }}
-        draft: false
+        #body: ${{ steps.template-release.outputs.text }}
+        body: '${{ steps.release-data.outputs.assets }}'
+        draft: true
         prerelease: false
 
     # TODO: Modify for "assets" array

@@ -1,12 +1,3 @@
-name: Build-All
-on: [push]
-
-# TODO:
-# - Verify output binary
-# - Create releases if pushed to Master (w/binary attachment and sig)
-#   This would require a private key in repo.  Maybe a short-expiring sub-key?
-#
-
 # We are using Matrix build here on Github Actions for parallel execution.
 # We have 3 parameters: device, arch, boot
 # While the Mark II allows for 4 builds (imx6ull, imx6ul) this matrix becomes
@@ -36,6 +27,15 @@ on: [push]
 # way of testing for failed builds with specific matrix params.  Therefore,
 # we need two "jobs" below.  One for mark one, and one for mark two.
 #
+
+name: Build-All
+#on:
+#  push:
+#    tags:
+#      - '!refs/tags/*'
+on:
+  push:
+    branches:
 
 jobs:
   mark-one:
