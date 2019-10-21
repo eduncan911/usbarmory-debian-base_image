@@ -76,7 +76,7 @@ jobs:
     # TODO: Modify for "body"
     - name: Create Release
       id: create_release
-      uses: .github/actions/create-release
+      uses: ./.github/actions/create-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
       with:
