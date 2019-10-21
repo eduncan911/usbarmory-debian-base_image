@@ -29,13 +29,14 @@
 #
 
 name: Build-All
-#on:
+# on:
 #  push:
 #    tags:
 #      - '!refs/tags/*'
 on:
   push:
     branches:
+      - '*'
 
 jobs:
   mark-one:
