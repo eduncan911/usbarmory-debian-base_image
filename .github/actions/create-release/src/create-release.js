@@ -17,7 +17,7 @@ async function run() {
     const releaseName = core.getInput('release_name', { required: true }).replace('refs/tags/', '');
     const draft = core.getInput('draft', { required: false }) === 'true';
     const prerelease = core.getInput('prerelease', { required: false }) === 'true';
-    const body = core.getInput('body', { required: false });
+    const bodyText = core.getInput('body', { required: false });
 
     // Create a release
     // API Documentation: https://developer.github.com/v3/repos/releases/#create-a-release
@@ -27,9 +27,9 @@ async function run() {
       repo,
       tag_name: tag,
       name: releaseName,
+      body: bodyText,
       draft,
-      prerelease,
-      body
+      prerelease
     });
 
     // Get the ID, html_url, and upload URL for the created Release from the response
