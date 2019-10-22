@@ -91,7 +91,8 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: true
-        arch: [imx6ul, imx6ull]
+      matrix:
+        arch: [imx6ull]
         boot: [uSD, eMMC]
         device: [mark-two]
     if: jobs.create_release.status == success
