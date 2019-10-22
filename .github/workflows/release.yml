@@ -30,6 +30,8 @@ jobs:
     #     variables: |
     #       RELEASE_DATE=20190506
     #       RELEASE_NOTES= # TODO, github.ref == tag notes?
+
+    steps:
     
     # TODO: Modify for "body"
     - name: Create Release
