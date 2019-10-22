@@ -24,10 +24,6 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       fail-fast: true
-      matrix:
-        arch: [imx53]
-        boot: [uSD]
-        device: [mark-one]
     steps:
     - uses: actions/checkout@v1
 
@@ -51,7 +47,7 @@ jobs:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         #body: ${{ steps.template-release.outputs.text }}
-        body: '${{ steps.release-data.outputs.assets }}'
+        body: '(insert body here)'
         draft: true
         prerelease: false
 
@@ -65,7 +61,7 @@ jobs:
         device: [mark-one]
       
     needs: create-release
-    
+
     steps:
     - uses: actions/checkout@v1
 
@@ -86,7 +82,7 @@ jobs:
 
     - name: Gather Release Data
       id: release-data
-      run: echo ::set-output na'${{ steps.release-data.outputs.assets }}me=assets::${ls -1 ./usbarmory-*}
+      run: echo ::set-output name=assets::${ls -1 ./usbarmory-*}
 
     # TODO: Modify for "assets" array
     # - name: Upload Assets to Release
@@ -130,7 +126,7 @@ jobs:
 
     - name: Gather Release Data
       id: release-data
-      run: echo ::set-output na'${{ steps.release-data.outputs.assets }}me=assets::${ls -1 ./usbarmory-*}
+      run: echo ::set-output name=assets::${ls -1 ./usbarmory-*}
 
     # TODO: Modify for "assets" array
     # - name: Upload Assets to Release
