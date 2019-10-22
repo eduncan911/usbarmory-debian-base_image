@@ -78,14 +78,11 @@ jobs:
         wget http://keys.inversepath.com/38DBBDC86092693E.asc && gpg --import 38DBBDC86092693E.asc
         wget http://keys.inversepath.com/87F9F635D31D7652.asc && gpg --import 87F9F635D31D7652.asc
 
+    - run:  make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} release
+
     - name: Gather Release Data
       id: release-data
-      run: |
-        export OUTPUT=$(ls -l ./)
-        echo ::set-output name=assets2::${OUTPUT}
-        echo ::set-output name=assets::$(ls -1 ./Dock*)
-
-    #- run:  make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} release
+      run: echo ::set-output name=assets::$(ls -1 ./usbarmory-*)
 
     # TODO: Modify for "assets" array
     # - name: Upload Assets to Release
