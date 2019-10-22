@@ -63,6 +63,9 @@ jobs:
         arch: [imx53]
         boot: [uSD]
         device: [mark-one]
+      
+    needs: create-release
+    
     steps:
     - uses: actions/checkout@v1
 
@@ -104,7 +107,9 @@ jobs:
         arch: [imx6ull]
         boot: [uSD, eMMC]
         device: [mark-two]
-    needs: create_release
+
+    needs: create-release
+    
     steps:
     - uses: actions/checkout@v1
 
