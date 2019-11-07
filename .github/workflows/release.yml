@@ -9,80 +9,117 @@
 # - use that token to create a GitHub Secret in your repo named: GITHUB_TOKEN_FOR_RELEASES
 # - ./.github/assets/release-template.json Template for Release Body
 #
-# TODO:
-# - Discuss PGP signing each file, which would require a sub-key in this repo
-#
 
 name: Release
+# on:
+#   push:
+#     tags:
+#       - '*'
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [created]
 
 jobs:
-  create-release:
+  get-env:
     runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: true
     steps:
     - uses: actions/checkout@v1
+    - run: env
 
-    # TODO: Create this action
-    # - name: Create Template for Release
-    #   id: template-release
-    #   uses: ./.github/actions/template
-    #   with:
-    #     input_file: ./.github/assets/release-template.json
-    #     variables: |
-    #       RELEASE_DATE=20190506
-    #       RELEASE_NOTES= # TODO, github.ref == tag notes?
+  # create-release:
+  #   runs-on: ubuntu-18.04
+  #   strategy:
+  #     fail-fast: true
+  #   steps:
+  #   - uses: actions/checkout@v1
+
+  #   # TODO: Create this action
+  #   # - name: Create Template for Release
+  #   #   id: template-release
+  #   #   uses: ./.github/actions/template
+  #   #   with:
+  #   #     input_file: ./.github/assets/release-template.json
+  #   #     variables: |
+  #   #       RELEASE_DATE=20190506
+  #   #       RELEASE_NOTES= # TODO, github.ref == tag notes?
     
-    # TODO: Modify for "body"
-    - name: Create Release
-      id: create_release
-      uses: ./.github/actions/create-release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        #body: ${{ steps.template-release.outputs.text }}
-        body: '(insert body here)'
-        draft: true
-        prerelease: false
+  #   # TODO: Modify for "body"
+  #   - name: Create Release
+  #     id: create_release
+  #     uses: csexton/create-release:add-body
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
+  #     with:
+  #       tag_name: ${{ github.ref }}
+  #       release_name: Release ${{ github.ref }}
+  #       body: |
+  #         Some dummy text for now.
 
-  mark-one:
-    runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: true
-      matrix:
-        arch: [imx53]
-        boot: [uSD]
-        device: [mark-one]
+  #         Eventually this will be a template.
+  #       draft: true
+  #       prerelease: false
+
+  # mark-one:
+  #   runs-on: ubuntu-18.04
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       arch: [imx53]
+  #       boot: [uSD]
+  #       device: [mark-one]
       
-    needs: create-release
+  #   needs: create-release
 
-    steps:
-    - uses: actions/checkout@v1
+  #   steps:
+  #   - uses: actions/checkout@v1
 
-    - name: Prerequisites
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
-          gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
-          sudo dirmngr bison flex libssl-dev kmod
+  #   - name: Prerequisites
+  #     run: |
+  #       sudo apt-get update
+  #       sudo apt-get install -y \
+  #         bc binfmt-support bzip2 fakeroot gcc gcc-arm-linux-gnueabihf git \
+  #         gnupg make parted qemu-user-static wget xz-utils zip debootstrap \
+  #         sudo dirmngr bison flex libssl-dev kmod
 
-    - name: Import Signing Keys
-      run: |  # public key servers time out on at least one test, therefore we fetch cached keys
-        wget http://keys.inversepath.com/38DBBDC86092693E.asc && gpg --import 38DBBDC86092693E.asc
-        wget http://keys.inversepath.com/87F9F635D31D7652.asc && gpg --import 87F9F635D31D7652.asc
+  #   - name: Import Signing Keys
+  #     run: |  # public key servers time out on at least one test, therefore we fetch cached keys
+  #       wget http://keys.inversepath.com/38DBBDC86092693E.asc && gpg --import 38DBBDC86092693E.asc
+  #       wget http://keys.inversepath.com/87F9F635D31D7652.asc && gpg --import 87F9F635D31D7652.asc
 
-    - run:  make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} release
+  #   #- run:  make V=${{ matrix.device }} IMX=${{ matrix.arch }} BOOT=${{ matrix.boot }} release
 
-    - name: Gather Release Data
-      id: release-data
-      run: echo ::set-output name=assets::$(ls -1 ./usbarmory-*)
+  #   - name: Prepare Release Assets
+  #     id: release-assets
+  #     run: |
+  #       mkdir -p release/
+  #       rm ./usbarmory-*.raw
+  #       mv ./usbarmory-* release/
+  #       echo ::set-output name=assets::$(ls -1 ./release/)
+
+  #   - uses: meeDamian/github-release@1.0
+  #     with:
+  #       token: ${{secrets.GITHUB_TOKEN_FOR_RELEASES}}
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # TODO: Modify for "assets" array
     # - name: Upload Assets to Release
