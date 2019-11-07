@@ -25,6 +25,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - run: env
+    - uses: csexton/release-asset-action@6a964e8
+      with:
+        file: "conf/*.conf"
+        github-token: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
 
   # create-release:
   #   runs-on: ubuntu-18.04
