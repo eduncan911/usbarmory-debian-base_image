@@ -24,7 +24,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
-    - run: env
+    - run: |
+            env
+            pwd
+            ls -la
     - uses: csexton/release-asset-action@6a964e8
       with:
         file: "conf/*.conf"
