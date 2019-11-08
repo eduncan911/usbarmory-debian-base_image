@@ -46,6 +46,7 @@ jobs:
     - name: Organize Release files to Upload
       run: |
         mkdir -p release/
+        rm *.raw
         mv usbarmory* release/
         ls -la release/
 
@@ -59,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [imx6ul, imx6ull]
+        arch: [imx6ull]
         boot: [uSD, eMMC]
         device: [mark-two]
     steps:
@@ -83,6 +84,7 @@ jobs:
     - name: Organize Release files to Upload
       run: |
         mkdir -p release/
+        rm *.raw
         mv usbarmory* release/
         ls -la release/
 
