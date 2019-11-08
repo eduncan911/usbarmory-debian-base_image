@@ -30,7 +30,7 @@ jobs:
             ls -la
     - uses: csexton/release-asset-action@6a964e8
       with:
-        file: "./conf/*.conf"
+        pattern: "conf/*.conf"
         github-token: ${{ secrets.GITHUB_TOKEN_FOR_RELEASES }}
 
   # create-release:
